@@ -9,7 +9,7 @@ const tableName = 'studentrecords';
 // Basically means 'localhost:<port>/' returns the webpage from the 'client-side' folder
 Router.use(express.static('./client-side'));
 
-// 'localhost:<port>/data' contains the data from the database
+// 'localhost:<port>/fetchData' contains the data from the database
 Router.get('/fetchData', (request, response) => {
     // In the date part of the query, 'YYYY-MM-DDT...' => 'DD-MM-YYYY'
     let fetchDataQuery = `SELECT student_id, first_name, last_name, DATE_FORMAT(DOB, "%d-%m-%Y") DOB, phone FROM ${tableName}`;
