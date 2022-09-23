@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(45, 45, 45);
+    background-color: rgb(32, 32, 32);
     font-family: Arial;
     color: white;
     padding-left: 18em;
@@ -39,7 +39,7 @@ button:active {
 }
 
 .input-boxes {
-    background-color: rgb(45, 45, 45);
+    background-color: rgb(32, 32, 32);
     display: flex;
     flex-direction: column;
     position: fixed;
