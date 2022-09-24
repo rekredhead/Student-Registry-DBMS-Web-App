@@ -1,4 +1,6 @@
 # Student-Registry-DBMS-Web-App
+![image](https://user-images.githubusercontent.com/98590275/192080319-e052c979-b617-415f-ba2f-6de5f47e89b5.png)
+
 Uses HTML, CSS and Javascript on the Front End. Uses Node.js, Express and MySQL on the Back End. Web App uses CRUD operations to create, update, delete and reset student data records and display data in the form of a table
 
 The Web App DOES NOT run with 'Go Live' on VSCode.
