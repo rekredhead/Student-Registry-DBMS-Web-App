@@ -1,3 +1,10 @@
+# TODO
+Add validation to frontend user inputs
+
+
+# How to setup and run server
+
+
 # Student-Registry-DBMS-Web-App
 Uses HTML, CSS and Javascript on the Front End. Uses Node.js, Express and MySQL on the Back End. Web App uses CRUD operations to create, update, delete and reset student data records and display data in the form of a table
 

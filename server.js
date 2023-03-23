@@ -12,5 +12,5 @@ app.use(Router);
 // Run the server at localhost:3000 if no port exists
 let port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server Listening at Port ${port}`);
+    console.log(`Open site at http://localhost:${port}`);
 });

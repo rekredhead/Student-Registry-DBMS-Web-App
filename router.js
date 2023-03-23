@@ -1,8 +1,6 @@
 const express = require('express');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
 const Router = express.Router();
-const connection = require('./connection');
+const connection = require('./database/connection');
 
 const tableName = 'studentrecords';
 
