@@ -7,9 +7,11 @@ document.getElementById('navbar-toggle-btn')
     if (column1.style.display !== 'none') {
         column1.style.display = 'none';
         buttonBar.style.left = '5em';
+        table.style.marginLeft = '6em';
     } else {
         column1.style.display = 'flex';
         buttonBar.style.left = '15em';
+        table.style.marginLeft = '18em';
     }
 });
 

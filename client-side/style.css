@@ -1,8 +1,10 @@
 body {
     margin: 0;
     background-color: rgb(0, 31, 66);
-    font-family: Arial, Helvetica, sans-serif;
     color: white;
+}
+* {
+    font-family: 'Roboto', sans-serif;
 }
 
 #navbar-toggle-btn {
@@ -37,6 +39,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    width: 13em;
 }
 .input-box p {
     margin: 0.5em 0;
@@ -96,66 +99,38 @@ body {
     border: 0.2em solid rgb(115, 157, 235);
     color: rgb(115, 157, 235);
     font-size: 1em;
-    font-weight: bold;
+    font-weight: 700;
     border-radius: 0.2em;
+    transition-duration: 0.2s;
 }
 .button-bar button:hover {
     background-color: rgb(115, 157, 235);
     color: rgb(0, 31, 66);
 }
 
-#table-el {
-    margin-left: 18em;
-    margin-top: 5em;
-}
-/*
-.button-bar {
-    display: flex;
-    height: 3.2em;
-    flex-direction: row;
-    justify-content: center;
-    justify-content: space-between;
-}
-.button-bar button {
-    border: none;
-    background-color: rgb(0, 53, 114);
-    color: white;
-    flex: 1;
-    font-size: 1.2em;
-    font-weight: bold;
-    border: 0.2em solid rgb(0, 89, 255);
-    border-left: none;
-    transition-duration: 0.2s;
-}
-button:hover {
-    background-color: rgb(0, 89, 255);
-}
-button:active {
-    background-color: rgb(0, 53, 114);
-    border-color:rgb(0, 53, 114)
-}
-
-
-
 table {
-    width: 100%;
-    background-color: white;
-    color: black;
+    margin-left: 18em;
+    margin-right: 1em;
+    margin-top: 5em;
+    background-color: rgb(156, 197, 250);
+    color: white;
     border-radius: 0.2em;
 }
 th {
-    background-color: rgb(197, 197, 197);
+    background-color: rgb(45, 82, 150);
 }
 th, td {
-    padding: 10px;
+    padding: 0.5em 1.5em;
     text-align: center;
+    word-wrap: break-word;
+    max-width: 20em;
+    overflow: hidden;
 }
 tr {
-    background-color: rgb(234, 234, 234);
+    background-color: rgb(95, 136, 211);
     transition: 0.1s;
 }
-tbody tr:hover {
-    background-color: yellowgreen;
+tr:hover {
+    background-color: rgb(126, 175, 28);
     transition: 0.1s;
 }
-*/
