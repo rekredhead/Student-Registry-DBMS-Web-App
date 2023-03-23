@@ -1,6 +1,5 @@
 const mysql = require('mysql');
 const dbName = 'studentdb';
-require('./createdb');
 
 let connection = mysql.createConnection({
     host: 'localhost',

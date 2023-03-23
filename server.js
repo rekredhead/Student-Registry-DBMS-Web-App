@@ -1,6 +1,7 @@
 const express = require('express');
 const Router = require('./router');
 const cors = require('cors');
+require('./database/createdb');
 
 // The API that handles the requests and responses
 const app = express();
