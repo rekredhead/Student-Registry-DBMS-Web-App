@@ -1,8 +1,24 @@
-document.getElementById('navbar-toggle-btn')
-.addEventListener('click', () => {
+const table         = document.getElementById("table-el");
+const studentIdEl   = document.getElementById("student-id");
+const firstNameEl   = document.getElementById("first-name");
+const lastNameEl    = document.getElementById("last-name");
+const dobEl         = document.getElementById("date-of-birth");
+const phoneNumEl    = document.getElementById("phone-number");
+
+const addBtn    = document.getElementById("add-button");
+const updateBtn = document.getElementById("update-button");
+const deleteBtn = document.getElementById("delete-button");
+const searchBtn = document.getElementById("search-button");
+const resetBtn  = document.getElementById("reset-button");
+const clearBtn  = document.getElementById("clear-button");
+
+const hasNumbersOnly = (value) => /^[0-9]*$/.test(value);
+const hasLettersOnly = (value) => /[a-z]/gi.test(value);
+const removeSpaces = (value) => value.replaceAll(" ", "");
+
+const toggleSideBar = () => {
     const column1 = document.querySelector('.column-1');
     const buttonBar = document.querySelector('.button-bar');
-    const table = document.getElementById('table-el');
     
     if (column1.style.display !== 'none') {
         column1.style.display = 'none';
@@ -13,24 +29,82 @@ document.getElementById('navbar-toggle-btn')
         buttonBar.style.left = '15em';
         table.style.marginLeft = '18em';
     }
+}
+document.getElementById('navbar-toggle-btn').addEventListener('click', toggleSideBar);
+
+// Input Validation
+const isStudentIdValid = () => {
+    const studentId = removeSpaces(studentIdEl.value);
+    if (!hasNumbersOnly(studentId)) {
+        alert("Please enter numbers for your student ID");
+        return false;
+    }
+    return true;
+}
+const isFirstNameValid = () => {
+    const firstName = removeSpaces(firstNameEl.value);
+    if (firstName === "") {
+        alert("Please enter your first name");
+        return false;
+    } else if (!hasLettersOnly(firstName)) {
+        alert("Please enter letters for your first name");
+        return false;
+    }
+    return true;
+}
+const isLastNameValid = () => {
+    const lastName = removeSpaces(lastNameEl.value);
+    if (lastName === "") {
+        alert("Please enter your last name");
+        return false;
+    } else if (!hasLettersOnly(lastName)) {
+        alert("Please enter letters for your last name");
+        return false;
+    }
+    return true;
+}
+const isDobValid = () => {
+    const dob = dobEl.value;
+    if (dob === "") {
+        alert("Please enter your date of birth");
+        return false;
+    }
+
+    const userAge = (Date.now() - Date.parse(dobEl.value)) / 31104000000;
+    if (userAge < 5) {
+        alert("Please enter your correct age");
+        return false;
+    }
+    return true;
+}
+const isPhoneNumValid = () => {
+    const phoneNum = removeSpaces(phoneNumEl.value);
+    if (phoneNum === "") {
+        alert("Please enter your phone number");
+        return false;
+    } else if (!hasNumbersOnly(phoneNum) && phoneNum.length !== 10) {
+        alert("Please enter a 10-digit number");
+        return false;
+    }
+    return true;
+}
+const inputsToValidate = [
+    isStudentIdValid, isFirstNameValid, isLastNameValid,
+    isDobValid, isPhoneNumValid
+];
+const isDataValid = (index) => {
+    for (let i = 0; i < index; i++) {
+        if (!inputsToValidate[i]()) return false;
+    }
+    return true;
+}
+document.querySelectorAll('input').forEach((item, index) => {
+    item.addEventListener('focus', () => {
+        if (!isDataValid(index)) {
+            item.blur();
+        }
+    })
 });
-
-
-// Initializing the DOM elements
-let table = document.getElementById("table-el");
-let idEl = document.getElementById("student-id");
-let fnameEl = document.getElementById("first-name");
-let lnameEl = document.getElementById("last-name");
-let dobEl = document.getElementById("date-of-birth");
-let phoneEl = document.getElementById("phone-number");
-
-// Initializing the buttons
-let addBtn = document.getElementById("add-button");
-let updateBtn = document.getElementById("update-button");
-let deleteBtn = document.getElementById("delete-button");
-let searchBtn = document.getElementById("search-button");
-let resetBtn = document.getElementById("reset-button");
-let clearBtn = document.getElementById("clear-button");
 
 // Fetching database data from the server ('localhost:3000/fetchData') as js objects and store each object value in the webpage table
 // Will be called in Add, Update, Delete and Reset buttons as well to avoid having to refresh the webpage every time
@@ -65,11 +139,11 @@ loadHTMLTable();
 
 // Clear all data from the input boxes when clear-button is clicked
 clearBtn.addEventListener("click", () => {
-    idEl.value = "";
-    fnameEl.value = "";
-    lnameEl.value = "";
+    studentIdEl.value = "";
+    firstNameEl.value = "";
+    firstNameEl.value = "";
     dobEl.value = "";
-    phoneEl.value = "";
+    phoneNumEl.value = "";
 });
 
 let rows = table.getElementsByTagName("tr"); // Table rows
@@ -95,11 +169,11 @@ table.addEventListener("click", () => {
                 let phoneCell = row.getElementsByTagName("td")[4];
 
                 // Change inner text in the input boxes to the 'values' in the table row clicked
-                idEl.value = idCell.innerHTML;
-                fnameEl.value = fnameCell.innerHTML;
-                lnameEl.value = lnameCell.innerHTML;
+                studentIdEl.value = idCell.innerHTML;
+                firstNameEl.value = fnameCell.innerHTML;
+                firstNameEl.value = lnameCell.innerHTML;
                 dobEl.value = dobCell.innerHTML;
-                phoneEl.value = phoneCell.innerHTML;
+                phoneNumEl.value = phoneCell.innerHTML;
             };
         };
         currentRow.ondblclick = createClickHandler(currentRow);
@@ -111,10 +185,10 @@ addBtn.addEventListener("click", () => {
     let dataPackage = {};
 
     // Values in text boxes - exclude 'id' - incrementing column
-    let textBoxFname = fnameEl.value;
-    let textBoxLname = lnameEl.value
+    let textBoxFname = firstNameEl.value;
+    let textBoxLname = firstNameEl.value
     let textBoxDob = dobEl.value;
-    let textBoxPhone = phoneEl.value;
+    let textBoxPhone = phoneNumEl.value;
 
     let emptyBox = ["", " "]; // Empty Boxes
 
@@ -152,11 +226,11 @@ updateBtn.addEventListener("click", () => {
     if (!check_valid_inputs()) return;
 
     let updatePackage = {};
-    let textBoxId = idEl.value;
-    let textBoxFname = fnameEl.value;
-    let textBoxLname = lnameEl.value
+    let textBoxId = studentIdEl.value;
+    let textBoxFname = firstNameEl.value;
+    let textBoxLname = firstNameEl.value
     let textBoxDob = dobEl.value;
-    let textBoxPhone = phoneEl.value;
+    let textBoxPhone = phoneNumEl.value;
 
     // Add all input values in the object
     updatePackage['student_id'] = textBoxId;
@@ -177,7 +251,7 @@ updateBtn.addEventListener("click", () => {
 
 // Send request to server to delete the record by it's ID
 deleteBtn.addEventListener("click", () => {
-    let textBoxId = idEl.value;
+    let textBoxId = studentIdEl.value;
 
     if (textBoxId === "" || textBoxId === " ") {
         alert("Please enter an ID or select a row");
@@ -204,11 +278,11 @@ searchBtn.addEventListener("click", () => {
     - If none of the data matches, display a notice that No Data was Found
     */
     // Values in text boxes
-    let textBoxId = idEl.value;
-    let textBoxFname = fnameEl.value;
-    let textBoxLname = lnameEl.value
+    let textBoxId = studentIdEl.value;
+    let textBoxFname = firstNameEl.value;
+    let textBoxLname = firstNameEl.value
     let textBoxDob = dobEl.value;
-    let textBoxPhone = phoneEl.value;
+    let textBoxPhone = phoneNumEl.value;
 
     // If all boxes are empty, display the alert message and don't run any further codes
     if (are_inputs_empty()) {
@@ -277,11 +351,11 @@ resetBtn.addEventListener("click", () => {
 
 // Returns true if all the boxes are empty
 are_inputs_empty = () => {
-    let id = idEl.value;
-    let fname = fnameEl.value;
-    let lname = lnameEl.value;
+    let id = studentIdEl.value;
+    let fname = firstNameEl.value;
+    let lname = firstNameEl.value;
     let dob = dobEl.value;
-    let phone = phoneEl.value;
+    let phone = phoneNumEl.value;
 
     let emptyBox = ["", " "];
 
@@ -295,7 +369,7 @@ check_valid_inputs = () => {
     let emptyBox = ["", " "];
 
     // If id not empty but is not a number - alert the user
-    let id = idEl.value;
+    let id = studentIdEl.value;
     if (!emptyBox.includes(id)) {
         if (isNaN(id)) {
             alert("Student id must be a number");
@@ -303,8 +377,8 @@ check_valid_inputs = () => {
         }
     }
 
-    let fname = fnameEl.value;
-    let lname = lnameEl.value;
+    let fname = firstNameEl.value;
+    let lname = firstNameEl.value;
     if (fname.length > 20 || lname.length > 20) {
         alert ("First and Last names should be less 20 letters");
         return false;
@@ -414,7 +488,7 @@ check_valid_inputs = () => {
         }
     }
     
-    let phone = phoneEl.value;
+    let phone = phoneNumEl.value;
     if (!emptyBox.includes(phone)) {
         if (isNaN(id) || phone.length !== 10) {
             alert ("Phone Number must be a number with 10 digits");
