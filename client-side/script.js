@@ -1,3 +1,18 @@
+document.getElementById('navbar-toggle-btn')
+.addEventListener('click', () => {
+    const column1 = document.querySelector('.column-1');
+    const column2 = document.querySelector('.column-2');
+    
+    if (column1.style.display !== 'none') {
+        column1.style.display = 'none';
+        column2.style.marginLeft = '4em';
+    } else {
+        column1.style.display = 'flex';
+        column2.style.marginLeft = '15em'
+    }
+});
+
+
 // Initializing the DOM elements
 let table = document.getElementById("table-el");
 let idEl = document.getElementById("student-id");

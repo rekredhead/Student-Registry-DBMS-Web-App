@@ -1,71 +1,121 @@
 body {
-    background-color: rgb(32, 32, 32);
-    font-family: Arial;
+    margin: 0;
+    background-color: rgb(0, 31, 66);
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
-    padding-left: 18em;
-    padding-top: 5em;
-    padding-right: 1em;
 }
 
+#navbar-toggle-btn {
+    display: flex;
+    position: fixed;
+    top: 0.3em;
+    left: 0.5em;
+    background-color: transparent;
+    border: 0.1em solid rgb(115, 157, 235);
+    color: white;
+    border-radius: 0.8em;
+    padding: 0.5em 0.8em;
+}
+#navbar-toggle-btn:hover {
+    background-color: rgb(115, 157, 235);
+    color: black;
+}
+
+.column-1 {
+    background-color: rgb(8, 52, 102);
+    display: flex;
+    position: absolute;
+    margin-right: 50em;
+    flex-direction: column;
+    padding: 1em;
+    gap: 2em;
+    top: 3em;
+    left: 0;
+    bottom: 0;
+    transition: left 0.3s ease-in-out;
+}
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.input-box p {
+    margin: 0.5em 0;
+    font-weight: bold;
+}
+.input-box input {
+    border: none;
+    border-radius: 0.2em;
+    padding: 0.5em 0.8em;
+    font-size: 0.85em;
+    background-color: transparent;
+    border: 0.1em solid rgb(115, 157, 235);
+    color:white;
+}
+.input-box input:focus {
+    outline: none;
+}
+#clear-button {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    bottom: 1em;
+    width: 12.5em;
+    font-size: 1em;
+    border: none;
+    padding: 0.5em;
+    border-radius: 0.2em;
+    background-color: rgb(8, 52, 102);
+    border: 0.1em solid rgb(115, 157, 235);
+    color: white;
+    transition-duration: 0.1s;
+}
+#clear-button:hover {
+    background-color: rgb(115, 157, 235);
+    color: black;
+}
+#clear-button:active {
+    background-color: rgb(0, 31, 66);
+    border-color: rgb(0, 31, 66);
+    color:white;
+}
+
+.column-2 {
+    border: 0.2em solid green;
+    margin-left: 15em;
+}
+/*
 .button-bar {
     display: flex;
     height: 3.2em;
     flex-direction: row;
     justify-content: center;
     justify-content: space-between;
-
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     right: 0;
 }
-button {
+.button-bar button {
     border: none;
-    background-color: gray;
+    background-color: rgb(0, 53, 114);
     color: white;
     flex: 1;
     font-size: 1.2em;
     font-weight: bold;
-    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
+    border: 0.2em solid rgb(0, 89, 255);
+    border-left: none;
+    transition-duration: 0.2s;
 }
 button:hover {
-    opacity: 0.5;
+    background-color: rgb(0, 89, 255);
 }
 button:active {
-    background-color: rgb(210, 210, 210);
-    color: black;
-    box-shadow: none;
-    opacity: 1;
+    background-color: rgb(0, 53, 114);
+    border-color:rgb(0, 53, 114)
 }
 
-.input-boxes {
-    background-color: rgb(32, 32, 32);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 3.2em;
-    bottom: 0;
-    left: 0;
-    padding-left: 1em;
-    padding-right: 3em;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
-}
-input {
-    border: none;
-    border-radius: 1em;
-    padding-left: 1em;
-    padding-right: 1em;
-    font-size: 0.94em;
-    height: 2em;
-    margin-bottom: 3em;
-}
-#clear-button {
-    border-radius: 1em;
-    width: 100%;
-    margin-left: 0.2em;
-    margin-right: 0.5em;
-    margin-bottom: 10em;
-}
+
 
 table {
     width: 100%;
@@ -88,3 +138,4 @@ tbody tr:hover {
     background-color: yellowgreen;
     transition: 0.1s;
 }
+*/

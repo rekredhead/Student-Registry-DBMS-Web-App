@@ -6,40 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management System</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href
+    ="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="button-bar">
-        <button id="add-button">Add</button>
-        <button id="update-button">Update</button>
-        <button id="delete-button">Delete</button>
-        <button id="search-button">Search</button>
-        <button id="reset-button">Reset</button>
-    </div>
-
-    <div class="input-boxes">
-        <p>Student ID</p>
-        <input id="student-id" type="text" placeholder="12">
-        <p>First Name</p>
-        <input id="first-name" type="text" placeholder="Michael">
-        <p>Last Name</p>
-        <input id="last-name" type="text" placeholder="Jordan">
-        <p>Date of Birth</p>
-        <input id="date-of-birth" type="text" placeholder="DD-MM-YYYY">
-        <p>Phone Number</p>
-        <input id="phone-number" type="text" placeholder="0000000000">
+    <button id="navbar-toggle-btn"><span class="material-symbols-outlined">
+        menu
+    </span></button>
+    <div class="column-1">
+        <div class="input-box">
+            <p>Student ID</p>
+            <input id="student-id" type="text" placeholder="12">
+        </div>
+        <div class="input-box">
+            <p>First Name</p>
+            <input id="first-name" type="text" placeholder="Michael">
+        </div>
+        <div class="input-box">
+            <p>Last Name</p>
+            <input id="last-name" type="text" placeholder="Jordan">
+        </div>
+        <div class="input-box">
+            <p>Date of Birth</p>
+            <input id="date-of-birth" type="text" placeholder="DD-MM-YYYY">
+        </div>
+        <div class="input-box">
+            <p>Phone Number</p>
+            <input id="phone-number" type="text" placeholder="0000000000">
+        </div>
         <button id="clear-button">Clear</button>
     </div>
 
-    <table id="table-el">
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Date of Birth</th>
-            <th>Phone Number</th>
-        </tr>
-    </table>
-
-    <script src="script.js"></script>
+    <div class="column-2">
+        <div class="button-bar">
+            <button id="add-button">Add</button>
+            <button id="update-button">Update</button>
+            <button id="delete-button">Delete</button>
+            <button id="search-button">Search</button>
+            <button id="reset-button">Reset</button>
+        </div>
+        <table id="table-el">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Phone Number</th>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
