@@ -1,5 +1,6 @@
 # TODO
 Cleanup frontend script code to have smaller code
+Change names of API URLs to suitable and meaningful names
 Upload Server to an AWS VM to host publicly - watch fireship how to deploy node.js app
 
 # Future

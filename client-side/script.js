@@ -163,48 +163,46 @@ const setInputBoxTextToSelectedRowData = (e) => {
         }
     }
 }
-
-// Add-function - send data as an object to the database
-addBtn.addEventListener("click", () => {
-    let dataPackage = {};
-
-    // Values in text boxes - exclude 'id' - incrementing column
-    let textBoxFname = firstNameEl.value;
-    let textBoxLname = firstNameEl.value
-    let textBoxDob = dobEl.value;
-    let textBoxPhone = phoneNumEl.value;
-
-    let emptyBox = ["", " "]; // Empty Boxes
-
-    // If all boxes except the 'id' box are empty, alert an error message
-    if (emptyBox.includes(textBoxFname) || emptyBox.includes(textBoxLname) || emptyBox.includes(textBoxDob) || emptyBox.includes(textBoxPhone)) {
-        alert("Please fill in ALL the boxes");
-        return;
+const sendNewDataToServer = async() => {
+    const inputBoxesData = inputBoxes.map(item => item.value);
+    for (let i = 1; i < inputBoxesData.length; i++) {
+        const inputBoxData = removeSpaces(inputBoxesData[i]);
+        if (inputBoxData === "") {
+            alert("Please fill in all the inputs");
+            return;
+        }
     }
 
-    if (!check_valid_inputs()) return;
+    if (!isDataValid(inputBoxesData.length)) return;
 
-    // Store each input value in the object
-    dataPackage['first_name'] = textBoxFname;
-    dataPackage['last_name'] = textBoxLname;
-    dataPackage['dob'] = textBoxDob;
-    dataPackage['phone'] = textBoxPhone;
+    let dataPackage = {};
+    dataPackage['first_name'] = inputBoxesData[1];
+    dataPackage['last_name'] = inputBoxesData[2];
+    dataPackage['dob'] = inputBoxesData[3];
+    dataPackage['phone'] = inputBoxesData[4];
     
-    // Post/send the object as a json object to 'localhost:3000/sendData' server
-    fetch('http://localhost:3000/sendData', {
+    const response = await fetch('http://localhost:3000/sendData', {
         headers: { 'Content-type': 'application/json' },
         method: 'POST',
         body: JSON.stringify(dataPackage)
     });
 
-    renderTable();
-});
-
-// Send request to server to update a record by it's ID
-updateBtn.addEventListener("click", () => {
-    if (are_inputs_empty()) {
-        alert("Select a row\nEdit the data in the boxes\nDo not edit the ID unless it is preferred");
+    if (!response.ok) {
+        alert("Failed to send request to server");
         return;
+    }
+
+    renderTable();
+}
+
+updateBtn.addEventListener("click", () => {
+    const inputBoxesData = inputBoxes.map(item => item.value);
+    for (let i = 0; i < inputBoxesData.length; i++) {
+        const inputBoxData = removeSpaces(inputBoxesData[i]);
+        if (inputBoxData === "") {
+            alert("Please be sure that all inputs are filled");
+            return;
+        }
     }
 
     if (!check_valid_inputs()) return;
@@ -332,20 +330,6 @@ resetBtn.addEventListener("click", () => {
 
     renderTable();
 });
-
-// Returns true if all the boxes are empty
-are_inputs_empty = () => {
-    let id = studentIdEl.value;
-    let fname = firstNameEl.value;
-    let lname = firstNameEl.value;
-    let dob = dobEl.value;
-    let phone = phoneNumEl.value;
-
-    let emptyBox = ["", " "];
-
-    return (emptyBox.includes(id) && emptyBox.includes(fname) && emptyBox.includes(lname) && 
-    emptyBox.includes(dob) && emptyBox.includes(phone));
-}
 
 // Checks if the input boxes have valid inputs - alerts warning for each incorrect input
 check_valid_inputs = () => {
@@ -483,11 +467,11 @@ check_valid_inputs = () => {
     return true;
 }
 
-
 // Event Listeners
 document.getElementById('navbar-toggle-btn').addEventListener('click', toggleSideBar);
 clearBtn.addEventListener("click", clearInputBoxes);
 document.body.addEventListener("dblclick", setTableRowBGColorToDefault);
 table.addEventListener("dblclick", setInputBoxTextToSelectedRowData);
+addBtn.addEventListener("click", sendNewDataToServer);
 
 renderTable(); // Current 497 lines of code
