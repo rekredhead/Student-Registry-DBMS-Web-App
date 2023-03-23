@@ -12,7 +12,7 @@ body {
     left: 0.5em;
     background-color: transparent;
     border: 0.1em solid rgb(115, 157, 235);
-    color: white;
+    color: rgb(115, 157, 235);
     border-radius: 0.8em;
     padding: 0.5em 0.8em;
 }
@@ -24,7 +24,7 @@ body {
 .column-1 {
     background-color: rgb(8, 52, 102);
     display: flex;
-    position: absolute;
+    position: fixed;
     margin-right: 50em;
     flex-direction: column;
     padding: 1em;
@@ -32,7 +32,6 @@ body {
     top: 3em;
     left: 0;
     bottom: 0;
-    transition: left 0.3s ease-in-out;
 }
 .input-box {
     display: flex;
@@ -80,9 +79,34 @@ body {
     color:white;
 }
 
-.column-2 {
-    border: 0.2em solid green;
-    margin-left: 15em;
+.button-bar {
+    display: flex;
+    position: fixed;
+    justify-content: space-evenly;
+    top: 0;
+    right: 0;
+    left: 15em;
+    height: 3em;
+    gap: 0.2em;
+}
+.button-bar button {
+    width: 100%;
+    min-width: 7em;
+    background-color: transparent;
+    border: 0.2em solid rgb(115, 157, 235);
+    color: rgb(115, 157, 235);
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 0.2em;
+}
+.button-bar button:hover {
+    background-color: rgb(115, 157, 235);
+    color: rgb(0, 31, 66);
+}
+
+#table-el {
+    margin-left: 18em;
+    margin-top: 5em;
 }
 /*
 .button-bar {
@@ -91,10 +115,6 @@ body {
     flex-direction: row;
     justify-content: center;
     justify-content: space-between;
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
 }
 .button-bar button {
     border: none;

@@ -1,14 +1,15 @@
 document.getElementById('navbar-toggle-btn')
 .addEventListener('click', () => {
     const column1 = document.querySelector('.column-1');
-    const column2 = document.querySelector('.column-2');
+    const buttonBar = document.querySelector('.button-bar');
+    const table = document.getElementById('table-el');
     
     if (column1.style.display !== 'none') {
         column1.style.display = 'none';
-        column2.style.marginLeft = '4em';
+        buttonBar.style.left = '5em';
     } else {
         column1.style.display = 'flex';
-        column2.style.marginLeft = '15em'
+        buttonBar.style.left = '15em';
     }
 });
 
