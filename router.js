@@ -10,7 +10,7 @@ Router.use(express.static('./client-side'));
 // 'localhost:<port>/fetchData' contains the data from the database
 Router.get('/fetchData', (request, response) => {
     // In the date part of the query, 'YYYY-MM-DDT...' => 'DD-MM-YYYY'
-    let fetchDataQuery = `SELECT student_id, first_name, last_name, DATE_FORMAT(DOB, "%d-%m-%Y") DOB, phone FROM ${tableName}`;
+    let fetchDataQuery = `SELECT student_id, first_name, last_name, DATE_FORMAT(DOB, "%Y-%m-%d") DOB, phone FROM ${tableName}`;
     connection.query(fetchDataQuery, (err, data) => {
         if (err) throw err;
         response.send(JSON.parse(JSON.stringify(data)));

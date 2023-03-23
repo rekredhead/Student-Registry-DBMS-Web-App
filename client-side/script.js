@@ -11,26 +11,14 @@ const deleteBtn = document.getElementById("delete-button");
 const searchBtn = document.getElementById("search-button");
 const resetBtn  = document.getElementById("reset-button");
 const clearBtn  = document.getElementById("clear-button");
+const tableRows = table.getElementsByTagName("tr");
 
 const hasNumbersOnly = (value) => /^[0-9]*$/.test(value);
 const hasLettersOnly = (value) => /[a-z]/gi.test(value);
 const removeSpaces = (value) => value.replaceAll(" ", "");
 
-const toggleSideBar = () => {
-    const column1 = document.querySelector('.column-1');
-    const buttonBar = document.querySelector('.button-bar');
-    
-    if (column1.style.display !== 'none') {
-        column1.style.display = 'none';
-        buttonBar.style.left = '5em';
-        table.style.marginLeft = '6em';
-    } else {
-        column1.style.display = 'flex';
-        buttonBar.style.left = '15em';
-        table.style.marginLeft = '18em';
-    }
-}
-document.getElementById('navbar-toggle-btn').addEventListener('click', toggleSideBar);
+const domain = window.location.origin;
+const inputBoxes = [studentIdEl, firstNameEl, lastNameEl, dobEl, phoneNumEl];
 
 // Input Validation
 const isStudentIdValid = () => {
@@ -106,79 +94,75 @@ document.querySelectorAll('input').forEach((item, index) => {
     })
 });
 
-// Fetching database data from the server ('localhost:3000/fetchData') as js objects and store each object value in the webpage table
-// Will be called in Add, Update, Delete and Reset buttons as well to avoid having to refresh the webpage every time
-let loadHTMLTable = async() => {
-    // Fetching the Database object from the server and store them as Javascript object
-    const response = await fetch('http://localhost:3000/fetchData');
+// Page Interactions
+const renderTable = async() => {
+    const response = await fetch(`${domain}/fetchData`);
     const tableData = await response.json();
     
+    table.innerHTML = "\
+        <tr>\
+            <th>ID</th>\
+            <th>First Name</th>\
+            <th>Last Name</th>\
+            <th>Date of Birth</th>\
+            <th>Phone Number</th>\
+        </tr>";
+
+    // When database has no data
     if (tableData.length === 0) {
-        // Basically if there is no data on the database - show the message on the Webpage table itself
-        let template = "<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th><th>Phone Number</th></tr>" + 
-                        "<tr><td colspan='5'>NO DATA AVAILABLE</td></tr>";
-        table.innerHTML = template;
+        table.innerHTML += "<tr><td colspan='5'>NO DATA AVAILABLE</td></tr>";
         return;
     }
     
-    table.innerHTML = "<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th><th>Phone Number</th></tr>";
-    // Display database values in the Table
-    for (let i=0; i < tableData.length; i++) {
-        let template = `
-                        <tr>
-                            <td>${tableData[i].student_id}</td>
-                            <td>${tableData[i].first_name}</td>
-                            <td>${tableData[i].last_name}</td>
-                            <td>${tableData[i].DOB}</td>
-                            <td>${tableData[i].phone}</td>
-                        </tr>`;
-        table.innerHTML += template;
+    // Render table to show database data
+    table.innerHTML += tableData.map(student => {
+        return `
+            <tr>
+                <td>${student.student_id}</td>
+                <td>${student.first_name}</td>
+                <td>${student.last_name}</td>
+                <td>${student.DOB}</td>
+                <td>${student.phone}</td>
+            </tr>`;
+    }).join();
+}
+const toggleSideBar = () => {
+    const column1 = document.querySelector('.column-1');
+    const buttonBar = document.querySelector('.button-bar');
+    
+    if (column1.style.display !== 'none') {
+        column1.style.display = 'none';
+        buttonBar.style.left = '5em';
+        table.style.marginLeft = '6em';
+    } else {
+        column1.style.display = 'flex';
+        buttonBar.style.left = '15em';
+        table.style.marginLeft = '18em';
     }
-};
-loadHTMLTable();
-
-// Clear all data from the input boxes when clear-button is clicked
-clearBtn.addEventListener("click", () => {
-    studentIdEl.value = "";
-    firstNameEl.value = "";
-    firstNameEl.value = "";
-    dobEl.value = "";
-    phoneNumEl.value = "";
-});
-
-let rows = table.getElementsByTagName("tr"); // Table rows
-
-// Return background color of all the rows to default when any part of the webpage is double-clicked
-document.body.addEventListener("dblclick", () => {
-    for (let i=1; i<rows.length; i++) {
-        rows[i].style.backgroundColor = null;
+}
+const clearInputBoxes = () => {
+    document.querySelectorAll('input').forEach(item => {
+        item.value = "";
+    });
+}
+const setTableRowBGColorToDefault = () => {
+    for (let i = 1; i < tableRows.length; i++) {
+        tableRows[i].style.backgroundColor = null;
     }
-});
-
-// Text in Input Boxes will change when a table row is double-clicked
-table.addEventListener("click", () => {
-    for (i=1; i < rows.length; i++) {
-        let currentRow = table.rows[i]; // Content in current row (tr)
-        let createClickHandler = (row) => {
-            return () => {
-                // Store each HTML data from the column of the clicked row into variables
-                let idCell = row.getElementsByTagName("td")[0];
-                let fnameCell = row.getElementsByTagName("td")[1];
-                let lnameCell = row.getElementsByTagName("td")[2];
-                let dobCell = row.getElementsByTagName("td")[3];
-                let phoneCell = row.getElementsByTagName("td")[4];
-
-                // Change inner text in the input boxes to the 'values' in the table row clicked
-                studentIdEl.value = idCell.innerHTML;
-                firstNameEl.value = fnameCell.innerHTML;
-                firstNameEl.value = lnameCell.innerHTML;
-                dobEl.value = dobCell.innerHTML;
-                phoneNumEl.value = phoneCell.innerHTML;
-            };
-        };
-        currentRow.ondblclick = createClickHandler(currentRow);
+}
+const setInputBoxTextToSelectedRowData = (e) => {
+    const selectedRow = e.target.parentElement;
+    
+    try {
+        selectedRow.querySelectorAll('td').forEach((item, index) => {
+            inputBoxes[index].value = item.innerHTML;
+        });
+    } catch (e) {
+        if (e.message === "inputBoxes[index] is undefined") {
+            alert("Please only select rows present on the table");
+        }
     }
-});
+}
 
 // Add-function - send data as an object to the database
 addBtn.addEventListener("click", () => {
@@ -213,7 +197,7 @@ addBtn.addEventListener("click", () => {
         body: JSON.stringify(dataPackage)
     });
 
-    loadHTMLTable();
+    renderTable();
 });
 
 // Send request to server to update a record by it's ID
@@ -246,7 +230,7 @@ updateBtn.addEventListener("click", () => {
         body: JSON.stringify(updatePackage)
     });
 
-    loadHTMLTable();
+    renderTable();
 });
 
 // Send request to server to delete the record by it's ID
@@ -268,7 +252,7 @@ deleteBtn.addEventListener("click", () => {
         body: JSON.stringify({ 'student_id':textBoxId })
     });
 
-    loadHTMLTable();
+    renderTable();
 });
 
 searchBtn.addEventListener("click", () => {
@@ -293,7 +277,7 @@ searchBtn.addEventListener("click", () => {
     if (!check_valid_inputs()) return;
 
     // Checking row-by-row if the input data matches the row data - highlights the row if it matches
-    let rowsLength = rows.length;
+    let rowsLength = tableRows.length;
     let is_data_found = false;
     for (i=1; i < rowsLength; i++) {
         let currentRow = table.rows[i]; // Content in current row (tr)
@@ -346,7 +330,7 @@ resetBtn.addEventListener("click", () => {
         method: 'DELETE'
     });
 
-    loadHTMLTable();
+    renderTable();
 });
 
 // Returns true if all the boxes are empty
@@ -498,3 +482,12 @@ check_valid_inputs = () => {
 
     return true;
 }
+
+
+// Event Listeners
+document.getElementById('navbar-toggle-btn').addEventListener('click', toggleSideBar);
+clearBtn.addEventListener("click", clearInputBoxes);
+document.body.addEventListener("dblclick", setTableRowBGColorToDefault);
+table.addEventListener("dblclick", setInputBoxTextToSelectedRowData);
+
+renderTable(); // Current 497 lines of code

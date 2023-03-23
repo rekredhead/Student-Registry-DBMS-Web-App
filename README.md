@@ -1,12 +1,17 @@
 # TODO
-Add validation to frontend user inputs
+Cleanup frontend script code to have smaller code
+Upload Server to an AWS VM to host publicly - watch fireship how to deploy node.js app
 
-
+# Future
+- Edit menu bar to have add, update, ..., insert column, delete column options
+    - Clicking on add, update,... buttons opens the student data input boxes section
+    - Click on insert, delete column,... opens section in same menu bar but has inputs to create/delete columns
+    - Use this method to add the alter table query in the server code
+- Implement same code but in different frameworks (Svelte, Nextjs, React, Vue, Solid)
 # How to setup and run server
 
 
 # Student-Registry-DBMS-Web-App
-![image](https://user-images.githubusercontent.com/98590275/192080319-e052c979-b617-415f-ba2f-6de5f47e89b5.png)
 
 Uses HTML, CSS and Javascript on the Front End. Uses Node.js, Express and MySQL on the Back End. Web App uses CRUD operations to create, update, delete and reset student data records and display data in the form of a table
 
