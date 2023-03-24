@@ -1,56 +1,82 @@
 const express = require('express');
-const Router = express.Router();
+const { DB_TABLE_NAME } = require('./config');
 const connection = require('./database/connection');
 
-const tableName = 'studentrecords';
+const router = express.Router();
+router.use('/', express.static('./client-side')); // Host main page in domain URL
 
-// Basically means 'localhost:<port>/' returns the webpage from the 'client-side' folder
-Router.use(express.static('./client-side'));
+// Change API URIs for this file and frontend script.js as well at the end
+// Add response status codes
+// Send error responses to frontend and make script.js display those errors to user (eg: Phone Number already exists)
 
-// 'localhost:<port>/fetchData' contains the data from the database
-Router.get('/fetchData', (request, response) => {
-    // In the date part of the query, 'YYYY-MM-DDT...' => 'DD-MM-YYYY'
-    let fetchDataQuery = `SELECT student_id, first_name, last_name, DATE_FORMAT(DOB, "%Y-%m-%d") DOB, phone FROM ${tableName}`;
+// /studentData
+router.get('/fetchData', (req, res) => {
+    const fetchDataQuery = `
+        SELECT
+            student_id,
+            first_name,
+            last_name,
+            DATE_FORMAT(DOB, "%Y-%m-%d") DOB,
+            phone
+        FROM ${DB_TABLE_NAME}`;
+
     connection.query(fetchDataQuery, (err, data) => {
         if (err) throw err;
-        response.send(JSON.parse(JSON.stringify(data)));
+        res.status(200).send(data);
     });
 });
 
-// Collecting requests (inserting data) from the server
-Router.post('/sendData', (request, response) => {
-    // Converting some of each item into a string before inserting them in the database
-    let fnameVal = JSON.stringify(request.body.first_name);
-    let lnameVal = JSON.stringify(request.body.last_name);
-    let phoneVal = request.body.phone;
-    let dobVal = convertToDate(request.body.dob);
+// /newStudentData
+router.post('/sendData', (req, res) => {
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
+    const phoneNumber = req.body.phone;
+    const dateOfBirth = req.body.dob;
 
-    let insertDataQuery = `
-                        INSERT INTO ${tableName} (first_name, last_name, DOB, phone) 
-                        VALUES (${fnameVal}, ${lnameVal}, ${dobVal}, ${phoneVal})`;
-
-    connection.query(insertDataQuery, (err) => {
+    const insertDataQuery = `
+        INSERT INTO ${DB_TABLE_NAME} (
+            first_name,
+            last_name,
+            DOB,
+            phone
+        ) VALUES (
+            '${firstName}',
+            '${lastName}',
+            '${dateOfBirth}',
+            '${phoneNumber}'
+        )`;
+    
+    connection.query(insertDataQuery, (err, data) => {
         if (err) throw err;
+        console.log(`Student ${data.insertId} Added`);
+        res.status(200).send("ok");
     });
 });
 
-// Delete all data from the database table
-Router.delete('/resetData', (request, response) => {
-    connection.query(`DELETE FROM ${tableName}`, (err) => {
+router.delete('/resetData', (req, res) => {
+    const deleteAllRecordsQuery = `DELETE FROM ${DB_TABLE_NAME}`;
+    connection.query(deleteAllRecordsQuery, (err) => {
         if (err) throw err;
+        console.log("Deleted all records");
+        res.status(200).send("ok");
     });
 });
 
-// Delete data record of a specific record identified by it's id
-Router.delete('/deleteRecord', (request, response) => {
-    let studID = JSON.parse(request.body.student_id);
-    connection.query(`DELETE FROM ${tableName} WHERE student_id = ${studID}`, (err) => {
+router.delete('/deleteRecord', (req, res) => {
+    const studentId = req.body.student_id;
+    const deleteRecordQuery = `
+        DELETE FROM ${DB_TABLE_NAME}
+        WHERE student_id = ${studentId}`;
+
+    connection.query(deleteRecordQuery, (err) => {
         if (err) throw err;
+        console.log(`Student ${studentId} deleted`);
+        res.status(200).send("ok");
     });
 });
 
 // Update data record of a specific record identified by it's id
-Router.put('/updateRecord', (request, response) => {
+router.put('/updateRecord', (request, response) => {
     // Converting the requested data from the client to valid SQL data types
     let studID = JSON.parse(request.body.student_id);
     let fnameVal = JSON.stringify(request.body.first_name);
@@ -59,7 +85,7 @@ Router.put('/updateRecord', (request, response) => {
     let dobVal = convertToDate(request.body.dob);
 
     // Query to update the record
-    let updateQuery = `UPDATE ${tableName} SET ` +
+    let updateQuery = `UPDATE ${DB_TABLE_NAME} SET ` +
         `first_name=${fnameVal}, last_name=${lnameVal}, DOB=${dobVal}, phone=${phoneVal} ` +
         `WHERE student_id=${studID}`;
     
@@ -69,7 +95,7 @@ Router.put('/updateRecord', (request, response) => {
 });
 
 // Display the message if user enters unavailable url
-Router.all('*', (request, result) => {
+router.all('*', (request, result) => {
     result.status(404).send("<h1>Resource not found</h1>")
 });
 
@@ -80,4 +106,4 @@ convertToDate = (dateString) => {
     return JSON.stringify(formattedDate);
 };
 
-module.exports = Router;
+module.exports = router;

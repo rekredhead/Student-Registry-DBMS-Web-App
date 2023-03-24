@@ -5,6 +5,7 @@ module.exports = {
     PORT,
     DOMAIN: `http://localhost:${PORT}`,
     DB_NAME: 'studentDB',
+    DB_TABLE_NAME: 'studentRecords',
     DB_PORT: process.env.DB_PORT,
     DB_HOST: process.env.DB_HOST,
     DB_USER: process.env.DB_USER,

@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = require('../config');
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME, DB_TABLE_NAME } = require('../config');
 
 let connectionWithoutDB = mysql.createConnection({
     host: DB_HOST,
@@ -21,9 +21,8 @@ connectionWithoutDB.connect((err) => {
         if (err) throw err;
     }); // Add database to connection
 
-    const tableName = 'studentRecords';
     const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS ${tableName} (
+        CREATE TABLE IF NOT EXISTS ${DB_TABLE_NAME} (
             student_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
             first_name VARCHAR(20),
             last_name VARCHAR(20),
