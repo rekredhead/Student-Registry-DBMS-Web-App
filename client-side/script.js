@@ -76,7 +76,7 @@ const isDataValid = (index) => {
 
 // Page Interactions
 const renderTable = async() => {
-    const response = await fetch(`${domain}/fetchData`);
+    const response = await fetch(`${domain}/records`);
     const tableData = await response.json();
     
     table.innerHTML = "\
@@ -143,8 +143,9 @@ const setInputBoxTextToSelectedRowData = (e) => {
         }
     }
 }
-const sendNewDataToServer = async() => {
+const sendNewRecordToServer = async() => {
     const inputBoxesData = inputBoxes.map(item => item.value);
+
     for (let i = 1; i < inputBoxesData.length; i++) {
         const inputBoxData = removeSpaces(inputBoxesData[i]);
         if (inputBoxData === "") {
@@ -161,7 +162,7 @@ const sendNewDataToServer = async() => {
     newDataPackage['dob'] = inputBoxesData[3];
     newDataPackage['phone'] = inputBoxesData[4];
     
-    const response = await fetch('http://localhost:3000/sendData', {
+    const response = await fetch(`${domain}/newRecord`, {
         headers: { 'Content-type': 'application/json' },
         method: 'POST',
         body: JSON.stringify(newDataPackage)
@@ -193,7 +194,7 @@ const sendUpdatedDataToServer = async() => {
     updateDataPackage['dob'] = inputBoxesData[3];
     updateDataPackage['phone'] = inputBoxesData[4];
     
-    const response = await fetch('http://localhost:3000/updateRecord', {
+    const response = await fetch(`${domain}/updatedRecord`, {
         headers: { 'Content-type':'application/json' },
         method: 'PUT',
         body: JSON.stringify(updateDataPackage)
@@ -213,12 +214,9 @@ const sendDeleteStudentRequestToServer = async() => {
         alert("Please enter an ID of the student or select a row");
         return;
     }
-    if (!isDataValid(1)) {
-        alert("Please enter a number for the ID");
-        return;
-    }
+    if (!isDataValid(1)) return;
 
-    const response = await fetch('http://localhost:3000/deleteRecord', {
+    const response = await fetch(`${domain}/deleteRecord`, {
         headers: { 'Content-type': 'application/json' },
         method: 'DELETE',
         body: JSON.stringify({ student_id })
@@ -270,9 +268,10 @@ const findDataInTable = () => {
 const sendDeleteAllRecordsRequestToServer = async() => {
     if (!confirm("Are you sure you want to delete ALL records")) return;
     
-    const response = await fetch('http://localhost:3000/resetData', {
+    const response = await fetch(`${domain}/deleteAllRecords`, {
         headers: { 'Content-type': 'application/json'},
-        method: 'DELETE'
+        method: 'DELETE',
+        body: JSON.stringify({confirmation: 'Yes, Reset'})
     });
 
     if (!response.ok) {
@@ -288,7 +287,7 @@ document.getElementById('navbar-toggle-btn').addEventListener('click', toggleSid
 clearBtn.addEventListener("click", clearInputBoxes);
 document.body.addEventListener("dblclick", setTableRowBGColorToDefault);
 table.addEventListener("dblclick", setInputBoxTextToSelectedRowData);
-addBtn.addEventListener("click", sendNewDataToServer);
+addBtn.addEventListener("click", sendNewRecordToServer);
 updateBtn.addEventListener("click", sendUpdatedDataToServer);
 deleteBtn.addEventListener("click", sendDeleteStudentRequestToServer);
 searchBtn.addEventListener("click", findDataInTable);

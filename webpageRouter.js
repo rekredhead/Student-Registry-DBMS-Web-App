@@ -47,28 +47,6 @@ router.post('/newRecord', (req, res) => {
     });
 });
 
-router.delete('/deleteAllRecords', (req, res) => {
-    const deleteAllRecordsQuery = `DELETE FROM ${DB_TABLE_NAME}`;
-    connection.query(deleteAllRecordsQuery, (err) => {
-        if (err) throw err;
-        console.log("Deleted all records");
-        res.status(200).send("ok");
-    });
-});
-
-router.delete('/deleteRecord', (req, res) => {
-    const studentId = req.body.student_id;
-    const deleteRecordQuery = `
-        DELETE FROM ${DB_TABLE_NAME}
-        WHERE student_id = ${studentId}`;
-
-    connection.query(deleteRecordQuery, (err) => {
-        if (err) throw err;
-        console.log(`Student ${studentId} deleted`);
-        res.status(200).send("ok");
-    });
-});
-
 router.put('/updatedRecord', (req, res) => {
     const studentID = req.body.student_id;
     const firstName = req.body.first_name;
@@ -87,6 +65,32 @@ router.put('/updatedRecord', (req, res) => {
     connection.query(updateQuery, (err) => {
         if (err) throw err;
         console.log(`Student ${studentID} updated`);
+        res.status(200).send("ok");
+    });
+});
+
+router.delete('/deleteRecord', (req, res) => {
+    const studentId = req.body.student_id;
+    const deleteRecordQuery = `
+        DELETE FROM ${DB_TABLE_NAME}
+        WHERE student_id = ${studentId}`;
+
+    connection.query(deleteRecordQuery, (err) => {
+        if (err) throw err;
+        console.log(`Student ${studentId} deleted`);
+        res.status(200).send("ok");
+    });
+});
+
+router.delete('/deleteAllRecords', (req, res) => {
+    const hasUserConfirmedToResetTable = req.body.confirmation;
+    const deleteAllRecordsQuery = `DELETE FROM ${DB_TABLE_NAME}`;
+
+    if (hasUserConfirmedToResetTable !== 'Yes, Reset') return;
+
+    connection.query(deleteAllRecordsQuery, (err) => {
+        if (err) throw err;
+        console.log("Deleted all records");
         res.status(200).send("ok");
     });
 });
