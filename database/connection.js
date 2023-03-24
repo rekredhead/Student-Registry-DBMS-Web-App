@@ -1,12 +1,12 @@
 const mysql = require('mysql');
-const dbName = 'studentdb';
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = require('../config');
 
-let connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'kenichi12345',
-    database: dbName,
-    port: 3306
+const connection = mysql.createConnection({
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: DB_PORT
 });
 
 module.exports = connection;
