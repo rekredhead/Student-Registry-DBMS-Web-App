@@ -5,12 +5,7 @@ const connection = require('./database/connection');
 const router = express.Router();
 router.use('/', express.static('./client-side')); // Host main page in domain URL
 
-// Change API URIs for this file and frontend script.js as well at the end
-// Add response status codes
-// Send error responses to frontend and make script.js display those errors to user (eg: Phone Number already exists)
-
-// /studentData
-router.get('/fetchData', (req, res) => {
+router.get('/records', (req, res) => {
     const fetchDataQuery = `
         SELECT
             student_id,
@@ -26,8 +21,7 @@ router.get('/fetchData', (req, res) => {
     });
 });
 
-// /newStudentData
-router.post('/sendData', (req, res) => {
+router.post('/newRecord', (req, res) => {
     const firstName = req.body.first_name;
     const lastName = req.body.last_name;
     const phoneNumber = req.body.phone;
@@ -53,7 +47,7 @@ router.post('/sendData', (req, res) => {
     });
 });
 
-router.delete('/resetData', (req, res) => {
+router.delete('/deleteAllRecords', (req, res) => {
     const deleteAllRecordsQuery = `DELETE FROM ${DB_TABLE_NAME}`;
     connection.query(deleteAllRecordsQuery, (err) => {
         if (err) throw err;
@@ -75,35 +69,31 @@ router.delete('/deleteRecord', (req, res) => {
     });
 });
 
-// Update data record of a specific record identified by it's id
-router.put('/updateRecord', (request, response) => {
-    // Converting the requested data from the client to valid SQL data types
-    let studID = JSON.parse(request.body.student_id);
-    let fnameVal = JSON.stringify(request.body.first_name);
-    let lnameVal = JSON.stringify(request.body.last_name);
-    let phoneVal = JSON.stringify(request.body.phone);
-    let dobVal = convertToDate(request.body.dob);
+router.put('/updatedRecord', (req, res) => {
+    const studentID = req.body.student_id;
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
+    const phoneNumber = req.body.phone;
+    const dateOfBirth = req.body.dob;
 
-    // Query to update the record
-    let updateQuery = `UPDATE ${DB_TABLE_NAME} SET ` +
-        `first_name=${fnameVal}, last_name=${lnameVal}, DOB=${dobVal}, phone=${phoneVal} ` +
-        `WHERE student_id=${studID}`;
+    const updateQuery = `
+        UPDATE ${DB_TABLE_NAME} SET
+            first_name='${firstName}',
+            last_name='${lastName}',
+            DOB='${dateOfBirth}',
+            phone='${phoneNumber}'
+        WHERE student_id=${studentID}`;
     
     connection.query(updateQuery, (err) => {
         if (err) throw err;
+        console.log(`Student ${studentID} updated`);
+        res.status(200).send("ok");
     });
 });
 
-// Display the message if user enters unavailable url
-router.all('*', (request, result) => {
-    result.status(404).send("<h1>Resource not found</h1>")
+// If user open unavailable URI
+router.all('*', (req, res) => {
+    res.status(404).send("<h1>Resource not found</h1>")
 });
-
-convertToDate = (dateString) => {
-    // Collect date type string in the form "DD-MM-YYYY" and returns it as "YYYY-MM-DD"
-    let dateTimes = dateString.split("-");
-    let formattedDate = `${dateTimes[2]}-${dateTimes[1]}-${dateTimes[0]}`;
-    return JSON.stringify(formattedDate);
-};
 
 module.exports = router;

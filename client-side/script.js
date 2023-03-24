@@ -207,9 +207,9 @@ const sendUpdatedDataToServer = async() => {
     renderTable();
 }
 const sendDeleteStudentRequestToServer = async() => {
-    const studentId = removeSpaces(studentIdEl.value);
+    const student_id = removeSpaces(studentIdEl.value);
 
-    if (studentId === "") {
+    if (student_id === "") {
         alert("Please enter an ID of the student or select a row");
         return;
     }
@@ -217,12 +217,11 @@ const sendDeleteStudentRequestToServer = async() => {
         alert("Please enter a number for the ID");
         return;
     }
-    console.log(studentId);
 
     const response = await fetch('http://localhost:3000/deleteRecord', {
         headers: { 'Content-type': 'application/json' },
         method: 'DELETE',
-        body: JSON.stringify({ 'student_id':textBoxId })
+        body: JSON.stringify({ student_id })
     });
 
     if (!response.ok) {

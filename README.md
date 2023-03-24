@@ -2,6 +2,8 @@
 Change names of API URLs to suitable and meaningful names
 Upload Server to an AWS VM to host publicly - watch fireship how to deploy node.js app
 Make WebApp responsive for mobile devices
+Send error responses from router to frontend
+    Make script.js display those errors to user (eg: Phone Number already exists)
 
 # Future
 - Edit menu bar to have add, update, ..., insert column, delete column options
