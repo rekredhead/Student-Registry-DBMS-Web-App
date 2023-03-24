@@ -36,6 +36,8 @@ DB_PASSWORD=<mysql-password>
 
 # Project Description
 A Student Management Web Application, where you can add, update, delete and search student details, present in the table. You can delete all data in the table as well.
-Frontend => HTML | CSS | JavaScript
-Backend => Nodejs | Expressjs
-Database => MySQL
+- Frontend => HTML | CSS | JavaScript
+- Backend => Nodejs | Expressjs
+- Database => MySQL
+
+This is my very JavaScript project without any knowledge of Web Development (not even HTML lol).
