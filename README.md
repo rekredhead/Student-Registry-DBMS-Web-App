@@ -1,5 +1,4 @@
 # TODO
-Create .env and organize the server-side codes
 Change names of API URLs to suitable and meaningful names
 Upload Server to an AWS VM to host publicly - watch fireship how to deploy node.js app
 Make WebApp responsive for mobile devices

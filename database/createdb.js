@@ -1,41 +1,38 @@
-// Create connection to the MySQL database - creates new database if it doesn't exist
 const mysql = require('mysql');
-const dbName = 'studentdb';
-const tableName = 'studentrecords';
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = require('../config');
 
-// Create connection without the database
-let connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'kenichi12345',
-    port: 3306
+let connectionWithoutDB = mysql.createConnection({
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    port: DB_PORT
 });
 
-// Program only seemed to work when all the 'connection' related methods are inside the .connect() method
-connection.connect((err) => {
+connectionWithoutDB.connect((err) => {
     if (err) throw err;
     console.log("MySQL connected...");
 
-    // Create the database if it doesn't exist
-    connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err) => {
+    const createDBQuery = `CREATE DATABASE IF NOT EXISTS ${DB_NAME}`;
+    connectionWithoutDB.query(createDBQuery, (err) => {
         if (err) throw err;
     });
+    
+    connectionWithoutDB.changeUser({database: DB_NAME}, (err) => {
+        if (err) throw err;
+    }); // Add database to connection
 
-    // Reset the connection but add the database name - important if database was just created
-    connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'kenichi12345',
-        database: dbName
-    });
-
-    // Create the table if it doesn't exist in the database
-    let createTableQuery = `CREATE TABLE IF NOT EXISTS ${tableName} (student_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL, ` + 
-    "first_name VARCHAR(200), last_name VARCHAR(200), DOB DATE, phone VARCHAR(200))";
-
-    connection.query(createTableQuery, (err) => {
+    const tableName = 'studentRecords';
+    const createTableQuery = `
+        CREATE TABLE IF NOT EXISTS ${tableName} (
+            student_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            first_name VARCHAR(20),
+            last_name VARCHAR(20),
+            DOB DATE,
+            phone VARCHAR(10)
+        )`;
+    connectionWithoutDB.query(createTableQuery, (err) => {
         if (err) throw err;
     });
 });
 
-module.exports = connection;
+module.exports = connectionWithoutDB;
