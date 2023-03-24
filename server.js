@@ -1,17 +1,14 @@
+const { DOMAIN, PORT } = require('./config');
 const express = require('express');
-const Router = require('./router');
 const cors = require('cors');
 require('./database/createdb');
 
-// The API that handles the requests and responses
 const app = express();
+
+const webpageRouter = require('./webpageRouter'); // Router (API) for the webpage
 
 app.use(express.json());
 app.use(cors()); // Enable cors to allow site to run on GitHub pages
-app.use(Router);
+app.use(webpageRouter);
 
-// Run the server at localhost:3000 if no port exists
-let port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Open site at http://localhost:${port}`);
-});
+app.listen(PORT, () => console.log(`Open site at ${DOMAIN}`));
