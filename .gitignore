@@ -1,2 +1,4 @@
 # Avoid commit node_modules to repository
 node_modules/
+
+.env
